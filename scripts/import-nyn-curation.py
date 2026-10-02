@@ -23,7 +23,8 @@ def parse(raw:str):
   tokens=text.split();urls=URL.findall(text)
   if not urls or len(urls)!=len(tokens) or any(not URL.fullmatch(token) for token in tokens):
    errors.append(f"line {line_no}: cover URL이 아닙니다");continue
-  for value in urls:   parsed=urlparse(value)
+  for value in urls:
+   parsed=urlparse(value)
    if parsed.scheme not in {"http","https"} or not parsed.netloc:errors.append(f"line {line_no}: 잘못된 URL {value}")
    else:current["covers"].append(value)
  for entry in entries:
