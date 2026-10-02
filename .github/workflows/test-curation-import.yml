@@ -1,0 +1,18 @@
+name: Test NYN curation importer
+on:
+  push:
+    paths:
+      - scripts/import-nyn-curation.py
+      - scripts/test_import_nyn_curation.py
+      - src/main.tsx
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: python scripts/test_import_nyn_curation.py
