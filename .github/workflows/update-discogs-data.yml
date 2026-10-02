@@ -1,0 +1,26 @@
+name: Update Discogs taxonomy data
+on:
+  schedule:
+    - cron: "23 5 * * 1"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Fetch, generate and validate
+        run: |
+          python scripts/refresh_discogs_data.py
+          python scripts/compare_taxonomies.py
+          python scripts/validate_data.py
+      - name: Commit only changed data
+        run: |
+          git config user.name "rym-atlas-bot"
+          git config user.email "rym-atlas-bot@users.noreply.github.com"
+          git add public/data
+          git diff --cached --quiet || git commit -m "chore: refresh Discogs taxonomy data"
+          git push
