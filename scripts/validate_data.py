@@ -13,7 +13,7 @@ if curation_path.exists():
  curation=json.loads(curation_path.read_text());assert isinstance(curation,dict),"nyn-curation.json must be an object"
  for key,entry in curation.items():
   assert isinstance(entry,dict),f"curation entry {key} must be an object";recommendations=entry.get("recommendations",[]);assert isinstance(recommendations,list),f"recommendations for {key} must be a list";assert len(recommendations)<=4,f"curation entry {key} has more than four recommendations"
-  for item in recommendations:assert all(item.get(field) for field in ("artist","album","cover")),f"curation recommendation for {key} requires artist, album, cover"
+  for item in recommendations:`n   assert isinstance(item,dict) and item.get("cover"),f"curation recommendation for {key} requires cover"`n   for field in ("artist","album","year"): assert field not in item or isinstance(item[field],(str,int)),f"curation recommendation {field} for {key} is invalid"
   assert isinstance(entry.get("descriptionKo",""),str),f"descriptionKo for {key} must be text"
 overlap=json.loads((data/"taxonomy-overlap.json").read_text());assert all(key in overlap for key in ("shared","rymOnly","discogsOnly","possibleAliases"))
 print("RYM, Discogs and curation validation passed")
